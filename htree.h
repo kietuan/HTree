@@ -19,10 +19,10 @@ private:
     int (*hash) (FILETYPE){};
 
 public:
-    HTree(int (*hash_function)(FILETYPE) = nullptr):height{1} , hash {hash_function}
+    HTree(int (*hash_function)(FILETYPE) = nullptr) : height{1} , hash {hash_function}
     {   
         if (!hash)
-            hash = [] (FILETYPE& file) -> int
+            hash = [] (FILETYPE file) -> int
                 {
                     return std::hash<FILETYPE>() (file) % NODE_SIZE; //some types.
                 };
