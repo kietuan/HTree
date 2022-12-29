@@ -25,11 +25,11 @@ public:
             hash = [] (FILETYPE& file) -> int
                 {
                     return std::hash<FILETYPE>() (file) % NODE_SIZE; //some types.
-                }
+                };
         
         root = new Node(0, 1);
-        root->first_pointer = new Leaf(this->hash);
-        root->entries[0]    = new Leaf(this->hash);
+        root->first_child      = new Leaf(this->hash);
+        root->entries[0].child = new Leaf(this->hash);
     }
 
     void insert(FILETYPE);
@@ -41,13 +41,13 @@ template <typename FILETYPE>
 class HTree<FILETYPE>::Node
 {
 public:
-    void* first_pointer{};
+    void* first_child{};
     Entry entries[NODE_SIZE - 1];
     unsigned int numEntries{};
     bool isLeaf = false;
     std::uint8_t level{};
 
-    Node(std::uint8_t level, unsigned int numEntries = 1): first_pointer{nullptr}, numEntries{numEntries}, isLeaf{false}, level{level}
+    Node(std::uint8_t level, unsigned int numEntries = 1): first_child{nullptr}, numEntries{numEntries}, isLeaf{false}, level{level}
     {}
 };
 
@@ -76,7 +76,7 @@ public:
 
     void sort()
     {
-        std::sort(value, value + size, [] (FILETYPE& a, FILETYPE& b) -> bool
+        std::sort(value, value + size, [this] (FILETYPE& a, FILETYPE& b) -> bool
                                        {
                                             return (this->hash(a) < this->hash(b));
                                        } 
