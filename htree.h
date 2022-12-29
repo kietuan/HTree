@@ -15,11 +15,11 @@ private:
     struct Entry;
 
     int height{}; //theo dõi chiều cao của cây;
-    Node* root{};
+    void* root{};
     int (*hash) (FILETYPE){};
 
 public:
-    HTree(int (*hash_function)(FILETYPE) = nullptr) : hash {hash_function}
+    HTree(int (*hash_function)(FILETYPE) = nullptr):height{1} , hash {hash_function}
     {   
         if (!hash)
             hash = [] (FILETYPE& file) -> int
@@ -27,9 +27,7 @@ public:
                     return std::hash<FILETYPE>() (file) % NODE_SIZE; //some types.
                 };
         
-        root = new Node(0, 1);
-        root->first_child      = new Leaf(this->hash);
-        root->entries[0].child = new Leaf(this->hash);
+        root = new Leaf(this->hash);
     }
 
     void insert(FILETYPE);
@@ -43,6 +41,7 @@ class HTree<FILETYPE>::Node
 public:
     void* first_child{};
     Entry entries[NODE_SIZE - 1];
+
     unsigned int numEntries{};
     bool isLeaf = false;
     std::uint8_t level{};
@@ -58,7 +57,7 @@ struct HTree<FILETYPE>::Entry
     int   key{};
     bool isCollision = false;
 
-    Entry(): child{nullptr}, key{0}, isCollision{0}
+    Entry(void* child = nullptr, int key = 0): child{child}, key{key}, isCollision{false}
     {}
 };
 
@@ -71,7 +70,7 @@ public:
     int (*hash) (FILETYPE){}; //thừa hưởng của class
     bool isLeaf = true;
 
-    Leaf(int (*hash) (FILETYPE)): size{0}, hash{hash}
+    Leaf(int (*hash) (FILETYPE)): size{0}, hash{hash}, isLeaf{true}
     {}
 
     void sort()
