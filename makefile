@@ -4,12 +4,12 @@ file =
 
 one:
 	$(CXX)  -I . $(FLAG) main.cpp -o main.o
-	main.o
+	./main.o
 	rm $(file).o
 
 all: 
 	$(CXX)  -I . $(FLAG) *.cpp -o main.o
-	main.o
+	./main.o
 	rm $(file).o
 
 
