@@ -17,13 +17,13 @@ private:
 
     int height{}; //theo dõi chiều cao của cây;
     Node* root{};
-    unsigned int (*hash) (FILETYPE){};
+    unsigned int (*hash) (const FILETYPE& ){};
 
 public:
-    HTree(unsigned int (*hash_function)(FILETYPE) = nullptr) : height{1} , hash {hash_function}
+    HTree(unsigned int (*hash_function)(const FILETYPE&) = nullptr) : height{1} , hash {hash_function}
     {   
         if (!hash)
-            hash = [] (FILETYPE file) -> unsigned int
+            hash = [] (const FILETYPE& file) -> unsigned int
                 {
                     return std::hash<FILETYPE>() (file); //some types.
                 };
@@ -36,7 +36,6 @@ public:
     void remove(FILETYPE);
 
 private:
-    void merge(Node*, unsigned int position);
     void split(Node*, unsigned int position);
 };
 
@@ -71,10 +70,10 @@ class HTree<FILETYPE>::Leaf
 public:
     FILETYPE value[LEAF_SIZE];
     int size{};
-    unsigned int (*hash) (FILETYPE){}; //thừa hưởng của class
+    unsigned int (*hash) (const FILETYPE& ){}; //thừa hưởng của class
     bool isLeaf = true;
 
-    Leaf(int (*hash) (FILETYPE)): size{0}, hash{hash}, isLeaf{true}
+    Leaf(int (*hash) (const FILETYPE& )): size{0}, hash{hash}, isLeaf{true}
     {}
 
     void sort()
