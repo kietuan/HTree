@@ -78,7 +78,7 @@ public:
 
     void sort()
     {
-        std::sort(value, value + size, [this] (FILETYPE& a, FILETYPE& b) -> bool
+        std::sort(value, value + size, [this] (const FILETYPE& a, const FILETYPE& b) -> bool
                                        {
                                             return (this->hash(a) < this->hash(b));
                                        } 
